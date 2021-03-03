@@ -1,9 +1,10 @@
 import gzip
-import shutil
+import glob
+from joblib import Parallel, delayed
 import os
 import pandas as pd
 import requests
-from joblib import Parallel, delayed
+import shutil
 
 class isd_lite:
 
@@ -58,10 +59,27 @@ class isd_lite:
                 self.decompress(fname)
                 
     
-    def download_all(self,n_jobs=10,):
+    def download_all(self,n_jobs=10):
 
         self.n_jobs = n_jobs
         Parallel(n_jobs=self.n_jobs)(delayed(self.download)(fname) for fname in self.fname_list)
+        
+    def append_station(self,fpath):
+
+        with open(fpath,'r',encoding='utf8') as f:
+            lines = f.readlines()
+            lines = [f"{fpath[len(self.file_outpath):-9]}   {line}" for line in lines]
+        with open(fpath, 'w', encoding='utf8') as f:
+            f.writelines(lines) 
+
+
+    def append_station_all(self,n_jobs=10):
+        
+        files = glob.glob(f'{self.file_outpath}*.csv')
+        
+        self.n_jobs = n_jobs
+        Parallel(n_jobs=self.n_jobs)(delayed(self.append_station)(fpath) for fpath in files)
+    
     
 
 

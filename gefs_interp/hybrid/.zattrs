@@ -1,0 +1,9 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "valid_time"
+    ],
+    "long_name": "hybrid level",
+    "positive": "down",
+    "standard_name": "atmosphere_hybrid_sigma_pressure_coordinate",
+    "units": "1"
+}
